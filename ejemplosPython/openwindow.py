@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 
 # Load an color image in grayscale
-img = cv2.imread("DSC_0860.JPG",0)
+img = cv2.imread("futbol.jpg",3)
 cv2.startWindowThread()
 cv2.namedWindow("preview")
 cv2.imshow("preview", img)
@@ -14,5 +14,3 @@ elif k == 115: # wait for 's' key to save and exit
 	cv2.destroyAllWindows()
 	print(k)
 	cv2.imwrite("DSC_0860_gis.png",img)
-
-

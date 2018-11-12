@@ -17,14 +17,14 @@ elif k == 115: # wait for 's' key to save and exit
 
 px = img[100,100]
 print ("Rgb (100,100) Pix vector")
-print px
+print(px)
 # accessing only blue pixel
-blue = img[100,100,0] 
+blue = img[100,100,0]
 print ("Blue Pix")
-print blue
+print(blue)
 
 # accessing RED value
-print img.item(10,10,2)
+print(img.item(10,10,2))
 
 # modifying RED value
 img.itemset((10,10,2),250)
@@ -33,17 +33,17 @@ img.itemset((10,10,2),250)
 img.itemset((10,10,1),250)
 img.itemset((10,10,0),250)
 
-print img.item(10,10,2)
+print(img.item(10,10,2))
 cv2.namedWindow("altered")
 cv2.imshow("altered", img)
 k=cv2.waitKey(0)
 
 #number of rows, columns and channels (if image is color)
-print img.shape
+print(img.shape)
 #number of pixels
-print img.size
+print(img.size)
 #Image datatype
-print img.dtype
+print(img.dtype)
 #Image ROI
 ball = img[280:340, 330:390]
 
@@ -68,6 +68,3 @@ img[:,:,2] = 0
 img[:,:,1] = 0
 cv2.imshow("BLUE", img)
 k=cv2.waitKey(0)
-
-
-
