@@ -6,7 +6,7 @@ def a(request):
     return request.param
 
 def test_a(a):
-    pass
+    assert a == 1
 
 def idfn(fixture_value):
     if fixture_value == 0:
@@ -19,5 +19,4 @@ def b(request):
     return request.param
 
 def test_b(b):
-    pass
-
+    assert b == 1

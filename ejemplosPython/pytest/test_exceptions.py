@@ -4,7 +4,7 @@ def ZeroDivision ():
     1/0
 
 def test_zero_division():
-#    with pytest.raises(ZeroDivisionError):
+    with pytest.raises(ZeroDivisionError):
         ZeroDivision()
 
 #verificar que el texto que devuelve la interrupcion tenga informacion esperada
@@ -16,7 +16,7 @@ def test_recursion_depth():
     print (excinfo.type)
     print (excinfo.traceback)
     print ("hola")
-    assert excinfo.type == 'exa'
+    #assert excinfo.type == exceptions.RuntimeError
 
 def f(a):
     a=a+1
