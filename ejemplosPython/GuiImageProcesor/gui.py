@@ -6,7 +6,7 @@ import commands
 threshold_value = 0;
 threshold_type = 3;
 max_value = 255;
-max_type = 4;
+max_type = 6;
 max_BINARY_value = 255;
 
 src=None
@@ -23,7 +23,7 @@ window_name = "Threshold Demo";
 window_result = "Result";
 
 
-trackbar_type = "Type: \n 0: Binary \n 1: Binary Inverted \n 2: Truncate \n 3: To Zero \n 4: To Zero Inverted";
+trackbar_type = "Type: \n 0: Binary \n 1: Binary Inverted \n 2: Truncate \n 3: To Zero \n 4: To Zero Inverted \n 5: Gausean (adaptive)  \n 6: Mean (adaptive) ";
 trackbar_value = "Value";
 
 drag = 0;
@@ -31,9 +31,19 @@ select_flag = 0;
 
 def Threshold_Demo( x ):
     global dst
-    #probar con adaptive gaussian thresold
-    ret,dst =cv2.threshold( src_gray, cv2.getTrackbarPos(trackbar_value,window_name), max_BINARY_value,cv2.getTrackbarPos(trackbar_type,window_name));
+    block = cv2.getTrackbarPos('adaptive',window_name)
+    if (block%2 == 0):
+        block = block +1
 
+    if(cv2.getTrackbarPos('adaptive',window_name)>0):
+        #probar con adaptive gaussian thresold
+        if (cv2.getTrackbarPos(trackbar_type,window_name)<5):
+            ret,dst =cv2.threshold( src_gray, cv2.getTrackbarPos(trackbar_value,window_name), max_BINARY_value,cv2.getTrackbarPos(trackbar_type,window_name));
+        else:
+            if(cv2.getTrackbarPos(trackbar_type,window_name)==5):
+                dst = cv2.adaptiveThreshold(src_gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,block,cv2.getTrackbarPos(trackbar_value,window_name))
+            else:
+                dst = cv2.adaptiveThreshold(src_gray,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,block,cv2.getTrackbarPos(trackbar_value,window_name))
     if(select_flag == 1):
         img1 = dst.copy();
         cv2.rectangle(img1, po1, po2, (0,255,0),3);
@@ -120,6 +130,10 @@ def main(argv ):
     cv2.createTrackbar( trackbar_type,
     window_name, threshold_type,
     max_type, Threshold_Demo );
+
+    cv2.createTrackbar( 'adaptive',
+    window_name, 11,
+    250, Threshold_Demo );
 
     cv2.createTrackbar( trackbar_value,
     window_name, threshold_value,
