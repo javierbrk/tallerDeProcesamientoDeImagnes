@@ -1,6 +1,7 @@
 import cv2
 import numpy
 import sys
+import commands
 
 threshold_value = 0;
 threshold_type = 3;
@@ -32,12 +33,12 @@ def Threshold_Demo( x ):
     global dst
     #probar con adaptive gaussian thresold
     ret,dst =cv2.threshold( src_gray, cv2.getTrackbarPos(trackbar_value,window_name), max_BINARY_value,cv2.getTrackbarPos(trackbar_type,window_name));
-    print (cv2.getTrackbarPos(trackbar_type,window_name))
-    print (cv2.getTrackbarPos(trackbar_value,window_name))
+
     if(select_flag == 1):
         img1 = dst.copy();
         cv2.rectangle(img1, po1, po2, (0,255,0),3);
         cv2.imshow(window_name,img1);
+
     else:
         cv2.imshow( window_name,dst);
 
@@ -92,24 +93,27 @@ def main(argv ):
     global img
     global roiImg
     global drag
+    global select_flag
+
 
     drag = 0;
     select_flag = 0;
 
 
-    #VideoCapture cap = VideoCapture(0); /* Start webcam */
+    cap = cv2.VideoCapture(0);
 
     #VideoCapture cap = VideoCapture("rtsp://admin:labdei2015@192.168.4.108:554/cam/realmonitor?channel=1&subtype=2");
 
 
-    #cap >> src;
-    src= cv2.imread("/home/patentes/Escritorio/ReposCurso/tallerDeProcesamientoDeImagnes/SACD/images/img36.jpg", 3);
+    camret,src = cap.read();
+    #src= cv2.imread("/home/patentes/Escritorio/ReposCurso/tallerDeProcesamientoDeImagnes/SACD/images/img36.jpg", 3);
 
     #/// Convert the image to Gray
     src_gray= cv2.cvtColor( src, cv2.COLOR_BGR2GRAY );
 
     #/// Create a window to display results
     cv2.namedWindow( window_name, cv2.WINDOW_AUTOSIZE );
+    cv2.namedWindow( window_result, cv2.WINDOW_AUTOSIZE );
 
 
     #/// Create Trackbar to choose type of Threshold
@@ -127,18 +131,18 @@ def main(argv ):
     #/// Wait until user finishes program
     while(1):
         #//  cap >> src;
-
+        camret,src = cap.read();
         cv2.setMouseCallback(window_name, mouseHandler);
         src_gray = cv2.cvtColor( src, cv2.COLOR_BGR2GRAY );
         Threshold_Demo(0);
 
-
-
-
-
         c = cv2.waitKey( 20 );
+
         if( c == 114 and select_flag == 1 ):
             cv2.imwrite("roiImg.jpg", roiImg);
+            print commands.getstatusoutput('ssocr -d -1 -T --charset=decimal roiImg.jpg')
+
+
             """system("ssocr -d -1 -T --charset=decimal roiImg.jpg");
 
 
@@ -150,7 +154,11 @@ def main(argv ):
             pclose(fp);
 
             putText(roiImg, var, cvPo(30,30),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250), 1, AA);
+
             """
+
+            roiImg = dst[po1[1]:po2[1],po1[0]:po2[0]];
+
             cv2.imshow( window_result, roiImg);
 
 
