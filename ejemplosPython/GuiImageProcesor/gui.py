@@ -18,8 +18,6 @@ rect=None
 img=None
 roiImg=None
 
-
-
 window_name = "Threshold Demo";
 window_result = "Result";
 
@@ -33,35 +31,43 @@ select_flag = 0;
 def Threshold_Demo( x ):
     global dst
     #probar con adaptive gaussian thresold
-    ret,dst =cv2.threshold( src_gray, threshold_value, max_BINARY_value,threshold_type);
-
+    ret,dst =cv2.threshold( src_gray, cv2.getTrackbarPos(trackbar_value,window_name), max_BINARY_value,cv2.getTrackbarPos(trackbar_type,window_name));
+    print (cv2.getTrackbarPos(trackbar_type,window_name))
+    print (cv2.getTrackbarPos(trackbar_value,window_name))
     if(select_flag == 1):
-        img1 = dst.clone();
-        cv2.rectangle(img1, po1, po2, cv2.RGB(255, 0, 0), 3, 8, 0);
+        img1 = dst.copy();
+        cv2.rectangle(img1, po1, po2, (0,255,0),3);
         cv2.imshow(window_name,img1);
     else:
         cv2.imshow( window_name,dst);
 
 def mouseHandler( event,  x,  y,  flags, param):
+    global po1
+    global po2
+    global drag
+    global img1
+    global roiImg
+    global select_flag
+
     if (event == cv2.EVENT_LBUTTONDOWN and not(drag)):
         #/* left button clicked. ROI selection begins */
-        po1 = cv2.Point(x, y);
+        po1 = (x, y);
         drag = 1;
 
 
     if (event ==cv2.EVENT_MOUSEMOVE and drag):
     #/* mouse dragged. ROI being selected */
-        img1 = dst.clone();
-        po2 = cv2.Point(x, y);
-        cv2.rectangle(img1, po1, po2, cv2.RGB(255, 0, 0), 3, 8, 0);
+        img1 = dst.copy();
+        po2 = (x, y);
+        cv2.rectangle(img1, po1, po2, (0,255,0),3);
         cv2.imshow(window_name, img1);
 
     if (event == cv2.EVENT_LBUTTONUP and drag):
 
-        po2 = cv2.Point(x, y);
-        rect = cv2.Rect(po1.x,po1.y,x-po1.x,y-po1.y);
+        po2 = (x, y);
+        #rect = cv2.Rect(po1.x,po1.y,x-po1.x,y-po1.y);
         drag = 0;
-        roiImg = dst[po1.y:y,po1.x:x];
+        roiImg = dst[po1[1]:y,po1[0]:x];
 
 
     if (event == cv2.EVENT_LBUTTONUP):
@@ -74,6 +80,22 @@ def mouseHandler( event,  x,  y,  flags, param):
 
 def main(argv ):
     global src_gray
+    global threshold_value;
+    global threshold_type;
+
+    global src
+    global dst
+    global img1
+    global po1
+    global po2
+    global rect
+    global img
+    global roiImg
+    global drag
+
+    drag = 0;
+    select_flag = 0;
+
 
     #VideoCapture cap = VideoCapture(0); /* Start webcam */
 
@@ -89,7 +111,7 @@ def main(argv ):
     #/// Create a window to display results
     cv2.namedWindow( window_name, cv2.WINDOW_AUTOSIZE );
 
-    
+
     #/// Create Trackbar to choose type of Threshold
     cv2.createTrackbar( trackbar_type,
     window_name, threshold_type,
@@ -100,7 +122,6 @@ def main(argv ):
     max_value, Threshold_Demo );
 
     #/// Call the function to initialize
-    dst=src_gray;
     Threshold_Demo(0);
 
     #/// Wait until user finishes program
