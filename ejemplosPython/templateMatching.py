@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-img = cv2.imread('/home/jjorge/tallerDeImagenes/ejemplosPython/futbol.jpg',0)
+img = cv2.imread('/home/jjorge/tallerDeImagenes/SACD/images/12_640480.jpg',0)
 img2 = img.copy()
-template = cv2.imread('/home/jjorge/tallerDeImagenes/ejemplosPython/messi_face.jpg',0)
+template = cv2.imread('/home/jjorge/tallerDeImagenes/SACD/images/12_640480_template.jpg',0)
 w, h = template.shape[::-1]
 
 # All the 6 methods for comparison in a list
