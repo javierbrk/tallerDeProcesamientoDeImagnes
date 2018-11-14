@@ -1,0 +1,6 @@
+[submodule "refProjects/ssocr"]
+	path = refProjects/ssocr
+	url = https://github.com/auerswal/ssocr.git
+[submodule "refProjects/SSOCR"]
+	path = refProjects/SSOCR
+	url = https://github.com/nanomoretti/SSOCR.git
